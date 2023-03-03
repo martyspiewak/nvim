@@ -66,7 +66,7 @@ packer.startup {
             requires = {
                 { 'nvim-lua/popup.nvim' },
                 { 'nvim-lua/plenary.nvim' },
-                { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
+                { 'nvim-telescope/telescope-fzf-native.nvim',  run = 'make' },
                 { 'nvim-telescope/telescope-file-browser.nvim' },
             },
             config = function() require('plugins.telescope') end,
@@ -217,10 +217,10 @@ packer.startup {
             config = function() require('neoscroll').setup() end,
         }
         use 'sindrets/diffview.nvim'
-        use {
-            'Pocco81/TrueZen.nvim',
-            config = function() require('plugins/truezen') end,
-        }
+        -- use {
+        --     'Pocco81/TrueZen.nvim',
+        --     config = function() require('plugins/truezen') end,
+        -- }
         use {
             'nvim-neotest/neotest',
             requires = {

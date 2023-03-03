@@ -10,12 +10,22 @@ check_dependencies({ "curl", "npm", "rg", { "fd", "fdfind" } })
 
 local memo = { status = "" }
 
+local function notify(title, type, msg)
+	if vim.in_fast_event() then
+		vim.schedule(function()
+			vim.notify_once(msg, type, { title = fmt("[Config] %s", title) })
+		end)
+	else
+		vim.notify_once(msg, type, { title = fmt("[Config] %s", title) })
+	end
+end
+
 local function printerr(title, msg)
-	vim.notify_once(msg, "error", { title = fmt("[Config] %s", title) })
+	notify(msg, "error", title)
 end
 
 local function warn(title, msg)
-	vim.notify_once(msg, "warn", { title = fmt("[Config] %s", title) })
+	notify(msg, "warn", title)
 end
 
 local function async_command(cmd, ignore_error)
@@ -57,19 +67,13 @@ end
 
 function _G.config_update()
 	async(function()
-		local did_update = await(async_command("git checkout v1"))
+		local did_update = await(async_command("git checkout main"))
 		if did_update == -1 then
 			printerr("Failed updating config", "Try doing a git pull in the repository directly.")
 			return
 		end
 	end)()
 end
-
-memo.status = " DEPRECATED"
-warn(
-	"DEPRECATED",
-	"You're using the v1 branch of this config. Consider migrating to the `main` branch or forking.\nRun `:help luan-deprecated` for more info"
-)
 
 config_update()
 
